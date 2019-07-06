@@ -7,27 +7,35 @@ use App\Task;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class displayTodo extends Controller
+class TasksController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-
         $tasks = Task::orderBy('created_at', 'asc')->get();
+        $filter = $request->input('filter');
+
+        if ($filter == 'active') {
+            $tasks = $tasks->filter(function ($value, $key) {
+                return $value->completed == '0';
+            });
+        } else if ($filter == 'completed') {
+            $tasks = $tasks->filter(function ($value, $key) {
+                return $value->completed == '1';
+            });
+        }
         //ソート済みのタスクをデータベースから取得
         //orderBy 指定したカラムでクエリ結果をソート
         //asc　昇順 desc 降順
         //created_at 作成時間　update_at 更新時間
-        return view('tasks', [
-            'tasks' => $tasks
-        ]);
+        return view('tasks', ['tasks' => $tasks]);
         /*viewの第二引数に配列を渡すと，配列のキー名を変数名としてビュー中で
-        使えるようになる。
-        */
+            使えるようになる。
+            */
     }
 
     /**

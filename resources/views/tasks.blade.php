@@ -37,7 +37,7 @@
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-6">
                             <button type="submit" class="btn btn-default">
-                                <i class="fa fa-btn fa-plus"></i>Add Task
+                                <i class="fa fa-btn fa-plus"></i>
                             </button>
                         </div>
                     </div>
@@ -52,6 +52,13 @@
             <div class="panel-heading">
                 Current Tasks
             </div>
+            <?php $i = 0; ?>
+            @foreach($tasks as $task)
+            @if($task->completed =='0')
+            <?php $i++; ?>
+            @endif
+            @endforeach
+
 
             <div class="panel-body">
                 <table class="table table-striped task-table">
@@ -113,13 +120,29 @@
                     </tbody>
                 </table>
             </div>
-            <div>
-                {{count($tasks)}}
-            </div>
+            <footer>
+                <div class=todo-count>
+                    active:{{$i}}
+                    <br>
+                    {{ str_replace(url('/'),"",request()->fullUrl()) }}
+                </div>
+                <ul class="filters">
+                    <li>
+                        <a href="/?filter=all">All</a>
+                    </li>
+                    <li>
+                        <a href="/?filter=active">Active</a>
+                    </li>
+                    <li>
+                        <a href="/?filter=completed">Completed</a>
+                    </li>
+                </ul>
+
+            </footer>
         </div>
         @endif
 
-        <div class="panel-body">
+        <div class=" panel-body">
             <table class="table table-striped task-table">
                 <thead>
                     <th>Completed</th>
@@ -182,6 +205,7 @@
                     @endforeach
                 </tbody>
             </table>
+
         </div>
     </div>
 </div>
