@@ -23,3 +23,5 @@ Route::post('/task', 'Todo\TasksController@store');
 Route::delete('/task/{id}', 'Todo\TasksController@destroy');
 
 Route::patch('/task/{id}', 'Todo\TasksController@update');
+
+Route::patch('/task', 'Todo\TasksController@updateAll');

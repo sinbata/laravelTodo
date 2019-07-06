@@ -24,7 +24,7 @@
                     CSRFからアプリケーションを守る。laravelは自動的にCFRFトークンを生成する。
                     実装にアプリケーションに対してリクエストを送信しているのかを確認するために利用 トークン隠しフィールドの生成
                      -->
-
+                    <input type="text" name="filter" style="display: none;" value="{{$filter}}">
                     <!-- Task Name  -->
                     <div class="form-group">
                         <label for="task-name" class="col-sm-3 control-label">Task</label>
@@ -42,6 +42,14 @@
                         </div>
                     </div>
                 </form>
+                <form action="{{ url('task')}}" method="POST">
+                    <input type="text" name="filter" style="display: none;" value="{{$filter}}">
+                    {{ csrf_field() }}
+                    {{ method_field('PATCH') }}
+                    <button type="submit" class="btn btn-done">
+                        <i class="fa fa-done"></i> All Done
+                    </button>
+                </form>
             </div>
         </div>
         <?php $i = 0; ?>
@@ -55,7 +63,7 @@
         @if (count($tasks) > 0)
         <div class="panel panel-default">
             <div class="panel-heading">
-                Current Tasks
+
             </div>
 
 
@@ -63,7 +71,7 @@
             <div class="panel-body">
                 <table class="table table-striped task-table">
                     <thead>
-                        <th>Task</th>
+                        <th>Current Tasks</th>
                         <th>&nbsp;</th>
                     </thead>
                     <!-- 
@@ -87,8 +95,13 @@
                                     <input type="hidden" name="_method" value="PATCH" が生成
                                     -->
                                     <button type="submit" class="btn btn-done">
-                                        <i class="fa fa-done"></i> Completed
+                                        <i class="fa fa-done"></i>
+                                        @if($task->completed=='0')Active
+                                        @else Completed
+                                        @endif
                                     </button>
+                                    <input type="text" name="filter" style="display: none;" value="{{$filter}}">
+
                                 </form>
                             </td>
 
@@ -111,6 +124,8 @@
                                     <button type="submit" class="btn btn-danger">
                                         <i class="fa fa-trash"></i> Delete
                                     </button>
+                                    <input type="text" name="filter" style="display: none;" value="{{$filter}}">
+
                                 </form>
                             </td>
                         </tr>
@@ -122,18 +137,19 @@
             </div>
             <footer>
                 <div class=todo-count>
-                    active:{{$i}}
-                    <br>
-                    {{ str_replace(url('/'),"",request()->fullUrl()) }}
+                    <strong>{{$i}}</strong>
+                    @if($i=="1"){{" task"}}
+                    @else($i!="1"){{" tasks"}}
+                    @endif
                 </div>
                 <ul class="filters">
-                    <li>
+                    <li style="display:inline;">
                         <a href="/?filter=all">All</a>
                     </li>
-                    <li>
+                    <li style="display:inline;">
                         <a href="/?filter=active">Active</a>
                     </li>
-                    <li>
+                    <li style="display:inline;">
                         <a href="/?filter=completed">Completed</a>
                     </li>
                 </ul>
