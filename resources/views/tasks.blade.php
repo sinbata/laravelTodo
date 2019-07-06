@@ -37,14 +37,19 @@
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-6">
                             <button type="submit" class="btn btn-default">
-                                <i class="fa fa-btn fa-plus"></i>
+                                <i class="fa fa-btn fa-plus"></i>Add item
                             </button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-
+        <?php $i = 0; ?>
+        @foreach($tasks as $task)
+        @if($task->completed =='0')
+        <?php $i++; ?>
+        @endif
+        @endforeach
         <!-- Current Tasks -->
         <!-- ０以上なら（タスクがなるなら） -->
         @if (count($tasks) > 0)
@@ -52,12 +57,7 @@
             <div class="panel-heading">
                 Current Tasks
             </div>
-            <?php $i = 0; ?>
-            @foreach($tasks as $task)
-            @if($task->completed =='0')
-            <?php $i++; ?>
-            @endif
-            @endforeach
+
 
 
             <div class="panel-body">
@@ -72,7 +72,7 @@
                         &nbsp　：non-break-space 改行をしないスペース
                     -->
                     <tbody>
-                        @foreach($tasks as $task)
+                        @foreach($filteredTasks as $task)
                         <!-- taskの要素を表示 -->
                         <tr>
 
@@ -142,71 +142,7 @@
         </div>
         @endif
 
-        <div class=" panel-body">
-            <table class="table table-striped task-table">
-                <thead>
-                    <th>Completed</th>
-                    <th>&nbsp;</th>
-                </thead>
-                <!-- 
-                        thead : table header 行をグループ化
-                        th : 見出しセル
-                        &nbsp　：non-break-space 改行をしないスペース
-                    -->
-                <tbody>
-                    @foreach($tasks as $task)
-                    @if($task->completed =='1')
-                    <!-- taskの要素を表示 -->
-                    <tr>
 
-                        <td>
-                            <form action="{{ url('task/'.$task->id) }}" method="POST">
-                                <!-- taskのidに対して 
-                                    deleteのパスは'/task/{id}' 
-                                    -->
-                                {{ csrf_field() }}
-                                {{ method_field('PATCH') }}
-                                <!-- httpメソッド　PATCH
-                                    <input type="hidden" name="_method" value="PATCH" が生成
-                                    -->
-                                <button type="submit" class="btn btn-done">
-                                    <i class="fa fa-done"></i> Completed
-                                </button>
-                            </form>
-                        </td>
-
-                        <!-- Task Name -->
-                        <td class="table-text">
-                            <div>{{ $task->name }}</div>
-                        </td>
-
-                        <!-- Delete Button -->
-                        <td>
-                            <form action="{{ url('task/'.$task->id) }}" method="POST">
-                                <!-- taskのidに対して 
-                                    deleteのパスは'/task/{id}' 
-                                    -->
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
-                                <!-- httpメソッド　DELETE	
-                                    <input type="hidden" name="_method" value="DELETE" が生成
-                                    -->
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fa fa-trash"></i> Delete
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    <td>&nbsp;</td>
-                    <div>
-
-                    </div>
-                    @endif
-                    @endforeach
-                </tbody>
-            </table>
-
-        </div>
     </div>
 </div>
 

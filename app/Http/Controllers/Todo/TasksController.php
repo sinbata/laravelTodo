@@ -18,13 +18,13 @@ class TasksController extends Controller
     {
         $tasks = Task::orderBy('created_at', 'asc')->get();
         $filter = $request->input('filter');
-
+        $filteredTasks = $tasks;
         if ($filter == 'active') {
-            $tasks = $tasks->filter(function ($value, $key) {
+            $filteredTasks = $tasks->filter(function ($value, $key) {
                 return $value->completed == '0';
             });
         } else if ($filter == 'completed') {
-            $tasks = $tasks->filter(function ($value, $key) {
+            $filteredTasks = $tasks->filter(function ($value, $key) {
                 return $value->completed == '1';
             });
         }
@@ -32,7 +32,7 @@ class TasksController extends Controller
         //orderBy 指定したカラムでクエリ結果をソート
         //asc　昇順 desc 降順
         //created_at 作成時間　update_at 更新時間
-        return view('tasks', ['tasks' => $tasks]);
+        return view('tasks', ['tasks' => $tasks, 'filteredTasks' => $filteredTasks]);
         /*viewの第二引数に配列を渡すと，配列のキー名を変数名としてビュー中で
             使えるようになる。
             */
